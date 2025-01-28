@@ -1,12 +1,11 @@
 package com.spring.home_solver.service;
 
-import com.spring.home_solver.DTO.UpdateUserProfileDTO;
-import com.spring.home_solver.DTO.UserProfileAndAllPostResponseDTO;
-import com.spring.home_solver.DTO.UserProfileResponseDTO;
+import com.spring.home_solver.DTO.*;
 import com.spring.home_solver.DTO.postDTO.PostInfoDTO;
 import com.spring.home_solver.DTO.userProfilAndAllPostDTO.UserProFileAndAllPostDTO;
 import com.spring.home_solver.entity.User;
 import com.spring.home_solver.entity.UserProfile;
+import com.spring.home_solver.exception.ApiErrorExc;
 import com.spring.home_solver.exception.NotFoundExc;
 import com.spring.home_solver.repository.UserProfileRepository;
 import com.spring.home_solver.repository.UserRepository;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -115,6 +115,40 @@ public class UserServiceImpl implements UserService {
         logger.info("userProfile with all =====> {}" ,dto);
 
         return new UserProfileAndAllPostResponseDTO(dto);
+    }
+
+    @Override
+    public ApiMessageResponse banUser(Integer userId) {
+        User existsUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundExc("user","userId",userId));
+        if(existsUser.getIsBan()) throw new ApiErrorExc("user already banned");
+        existsUser.setIsBan(true);
+        userRepository.save(existsUser);
+
+        return new ApiMessageResponse(new ApiMessageResponse.Message("user was banned"));
+    }
+
+    @Override
+    public ApiMessageResponse unBanUser(Integer userId) {
+        User existsUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundExc("user", "userId", userId));
+        if(!existsUser.getIsBan()) throw new ApiErrorExc("user was not banned");
+
+        existsUser.setIsBan(false);
+        userRepository.save(existsUser);
+
+        return new ApiMessageResponse(new ApiMessageResponse.Message("user was unbanned"));
+    }
+
+    @Override
+    public AllBannedUserResponseDTO getAllBannedUser() {
+        List<User> bannedUser = userRepository.findByIsBan();
+
+        Set<BannedUserDTO> bannedUserDTOS = bannedUser.stream()
+                .map(user -> modelMapper.map(user,BannedUserDTO.class))
+                .collect(Collectors.toSet());
+
+        return new AllBannedUserResponseDTO(bannedUserDTOS);
     }
 
     private boolean checkOldImage(UserProfile existsProfile) {

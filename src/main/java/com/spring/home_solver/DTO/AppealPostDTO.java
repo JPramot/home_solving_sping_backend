@@ -23,7 +23,7 @@ public class AppealPostDTO {
 
     private Integer postId;
 
-    private PostAppealedInfo posts;
+    private PostAppealedInfo post;
 
     private AppealPostOwner user;
 

@@ -202,12 +202,19 @@ public class PostServiceImpl implements PostService{
                     AppealPostDTO.PostAppealedInfo postInfo = modelMapper.map(appealPost.getPost(), AppealPostDTO.PostAppealedInfo.class);
                     AppealPostDTO.AppealPostOwner owner = modelMapper.map(appealPost.getUser(), AppealPostDTO.AppealPostOwner.class);
                     AppealPostDTO appealPostDTO = modelMapper.map(appealPost, AppealPostDTO.class);
-                    appealPostDTO.setPosts(postInfo);
+                    appealPostDTO.setPost(postInfo);
                     appealPostDTO.setUser(owner);
                     return appealPostDTO;
                 }).collect(Collectors.toSet());
 
         return new AllAppealPostResponseDTO(dtos);
+    }
+
+    @Override
+    public void deleteAppealPostById(Integer appealPostId) {
+        appealPostRepository.findById(appealPostId)
+                .orElseThrow(()-> new NotFoundExc("appealPost", "appealPostId",appealPostId));
+        appealPostRepository.deleteById(appealPostId);
     }
 
     private void deleteOldImageFromCloud(List<String> urls) {

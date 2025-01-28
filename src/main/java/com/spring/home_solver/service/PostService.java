@@ -19,4 +19,6 @@ public interface PostService {
     ApiMessageResponse appealPost(Integer postId, AppealPostRequestDTO body);
 
     AllAppealPostResponseDTO getAllAppealPost();
+
+    void deleteAppealPostById(Integer appealPostId);
 }

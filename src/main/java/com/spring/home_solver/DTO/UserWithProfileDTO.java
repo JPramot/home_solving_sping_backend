@@ -1,6 +1,7 @@
 package com.spring.home_solver.DTO;
 
 import com.spring.home_solver.enumulation.Gender;
+import com.spring.home_solver.enumulation.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -26,6 +27,8 @@ public class UserWithProfileDTO {
     private LocalDateTime createdAt;
 
     private UserProfileInfo userProfile;
+
+    private Role role;
 
     @Data
     @NoArgsConstructor

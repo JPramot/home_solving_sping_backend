@@ -1,8 +1,6 @@
 package com.spring.home_solver.service;
 
-import com.spring.home_solver.DTO.UpdateUserProfileDTO;
-import com.spring.home_solver.DTO.UserProfileAndAllPostResponseDTO;
-import com.spring.home_solver.DTO.UserProfileResponseDTO;
+import com.spring.home_solver.DTO.*;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
@@ -11,4 +9,10 @@ public interface UserService {
                                                  MultipartFile image);
 
     UserProfileAndAllPostResponseDTO getUserProfileByUserId(Integer userId);
+
+    ApiMessageResponse banUser(Integer userId);
+
+    ApiMessageResponse unBanUser(Integer userId);
+
+    AllBannedUserResponseDTO getAllBannedUser();
 }

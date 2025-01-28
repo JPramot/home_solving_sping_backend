@@ -65,4 +65,10 @@ public class PostController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @DeleteMapping("/appeal/{appealPostId}")
+    public ResponseEntity<Void> deleteAppealPost(@PathVariable Integer appealPostId) {
+        postService.deleteAppealPostById(appealPostId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
